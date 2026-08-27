@@ -4,33 +4,26 @@ import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.service';
 
-interface Model {
-  id: number;
-  vehicle: string;
-  volumetotal: number;
-  connected: number;
-  softwareUpdates: number;
-  img: string;
-}
-
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-vehicle',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './vehicle.html',
-  styleUrl: './vehicle.css'
+  styleUrls: ['./vehicle.css']
 })
 export class Vehicle implements OnInit {
   private apiService = inject(ApiService);
 
-  sidebarOpen = false;
-  userMenuOpen = false;
+  // Estados de layout
+  sidebarOpen: boolean = false;
+  userMenuOpen: boolean = false;
 
-  vehicles: Model[] = [];
+  // Dados dos Veículos
+  vehicles: any[] = [];
   selectedVehicleId: number | null = null;
-  selectedVehicle: Model | null = null;
+  selectedVehicle: any = null;
 
-  // Lista de VINs disponíveis na API
+  // Dados de Telemetria (VIN)
   vinList: string[] = [
     '2FRHDUYS2Y63NHD22454',
     '2RFAASDY54E4HDU34874',
@@ -57,13 +50,11 @@ export class Vehicle implements OnInit {
 
   carregarVeiculos(): void {
     this.apiService.getVehicles().subscribe({
-      next: (res: any) => {
-        this.vehicles = res.vehicles || [];
-        if (this.vehicles.length > 0) {
-          // Seleciona o Mustang por padrão se disponível, senão o primeiro
-          const mustang = this.vehicles.find(v => v.vehicle === 'Mustang');
-          this.selectedVehicle = mustang || this.vehicles[0];
-          this.selectedVehicleId = this.selectedVehicle.id;
+      next: (res) => {
+        this.vehicles = res;
+        if (this.vehicles && this.vehicles.length > 0) {
+          this.selectedVehicleId = this.vehicles[0].id;
+          this.selectedVehicle = this.vehicles[0];
         }
       },
       error: (err) => console.error('Erro ao buscar veículos:', err)
@@ -71,15 +62,18 @@ export class Vehicle implements OnInit {
   }
 
   onVehicleSelect(): void {
-    this.selectedVehicle = this.vehicles.find(v => v.id == this.selectedVehicleId) || null;
+    this.selectedVehicle = this.vehicles.find(
+      (v) => String(v.id) === String(this.selectedVehicleId)
+    ) || null;
   }
 
   carregarDadosVin(): void {
+    if (!this.selectedVin) return;
     this.apiService.getVehicleData(this.selectedVin).subscribe({
-      next: (res: any) => {
+      next: (res) => {
         this.telemetryData = res;
       },
-      error: (err) => console.error('Erro ao buscar telemetria do VIN:', err)
+      error: (err) => console.error('Erro ao buscar telemetria:', err)
     });
   }
 }

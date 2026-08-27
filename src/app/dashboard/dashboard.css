@@ -7,11 +7,12 @@
   font-family: Arial, sans-serif;
 }
 
-/* Header */
+/* Header alinhado nas extremidades */
 .topbar {
   height: 45px;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   padding: 0 15px;
   background-color: #ffffff;
 }
@@ -22,6 +23,44 @@
   font-size: 22px;
   cursor: pointer;
   color: #555;
+}
+
+/* Menu de Logout do Usuário */
+.user-menu-wrapper {
+  position: relative;
+}
+
+.user-btn {
+  background: #f8f9fa;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: 35px;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  border-radius: 4px;
+  z-index: 120;
+}
+
+.dropdown-item {
+  display: block;
+  padding: 8px 16px;
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.dropdown-item:hover {
+  background-color: #f1f1f1;
 }
 
 /* Sidebar */
@@ -69,7 +108,7 @@
   border-left-color: #d9534f;
 }
 
-/* Escurecimento ao abrir o menu */
+/* Backdrop */
 .backdrop {
   position: fixed;
   top: 0;
@@ -80,7 +119,7 @@
   z-index: 90;
 }
 
-/* Conteúdo central */
+/* Conteúdo central com Imagem + Card Flutuante */
 .main-content {
   display: flex;
   justify-content: center;
@@ -104,7 +143,6 @@
   display: block;
 }
 
-/* Card Flutuante Semitransparente */
 .welcome-card {
   position: absolute;
   width: 340px;
@@ -115,6 +153,7 @@
   display: flex;
   flex-direction: column;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+  z-index: 10;
 }
 
 .card-header {
@@ -127,6 +166,9 @@
 .card-body {
   padding: 20px 15px;
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .welcome-text {
@@ -134,4 +176,11 @@
   font-size: 18px;
   font-weight: 500;
   margin: 0;
+}
+
+.btn-dashboard {
+  color: #0076ce;
+  text-decoration: underline;
+  font-size: 14px;
+  cursor: pointer;
 }
