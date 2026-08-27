@@ -1,0 +1,40 @@
+<div class="page-container">
+  <!-- Topbar com botão do menu -->
+  <header class="topbar">
+    <button class="menu-btn" (click)="toggleSidebar()" aria-label="Abrir menu">
+      &#9776;
+    </button>
+  </header>
+
+  <!-- Sidebar Lateral -->
+  <aside class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-header">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Ford_logo_flat.svg" alt="Ford Logo" class="ford-logo">
+    </div>
+   
+  <nav class="sidebar-nav">
+    <a routerLink="/dashboard" (click)="toggleSidebar()" class="nav-item">Home</a>
+    <a routerLink="/vehicle" (click)="toggleSidebar()" class="nav-item">Dashboard</a>
+  </nav>
+  </aside>
+
+  <!-- Fundo escuro quando o menu está aberto -->
+  <div class="backdrop" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-content">
+    <div class="hero-wrapper">
+      <img src="img/ranger.png" alt="Ford Ranger" class="ranger-img">
+
+      <!-- Card Translúcido -->
+      <div class="welcome-card">
+        <div class="card-header">
+          <span>Sistema de dados FORD</span>
+        </div>
+        <div class="card-body">
+          <p class="welcome-text">Seja bem vindo(a)!</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

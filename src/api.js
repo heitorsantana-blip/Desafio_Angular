@@ -1,19 +1,18 @@
 const express = require("express");
 const path = require("path");
-const cors = require("cors")
+const cors = require("cors");
 
 const app = express();
 
 app.use(cors());
-// app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.use(express.static(path.join(__dirname)));
+// Serve os arquivos da pasta 'public' diretamente na raiz do servidor
+app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/login", async (req, res) => {
     try {
-        
-        const { nome, senha } = req.body
+        const { nome, senha } = req.body;
 
         if (!nome || !senha) {
             return res.status(400).json({
@@ -89,7 +88,7 @@ app.get("/vehicles", (req, res) => {
 
 app.post("/vehicleData", (req, res) => {
     try {
-        const { vin } = req.body
+        const { vin } = req.body;
 
         switch (vin) {
             case "2FRHDUYS2Y63NHD22454":
@@ -158,13 +157,12 @@ app.post("/vehicleData", (req, res) => {
                 });
         }
 
-
     } catch (error) {
         return res.status(500).json({
             message: "Falha na comunicação com o servidor!"
         });
     }
-})
+});
 
 app.listen(3001, () => {
     console.log("API running on http://localhost:3001/");

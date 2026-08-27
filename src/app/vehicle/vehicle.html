@@ -1,0 +1,106 @@
+<div class="dashboard-container">
+  <!-- Topbar com Título Centralizado e Menu de Usuário -->
+  <header class="topbar">
+    <button class="menu-btn" (click)="toggleSidebar()" aria-label="Abrir menu">&#9776;</button>
+    <h1 class="dashboard-title">Dashboard FORD</h1>
+    
+    <div class="user-menu-wrapper">
+      <button class="user-btn" (click)="toggleUserMenu()">
+        <span class="user-icon">&#128104;</span>
+      </button>
+
+      <div class="user-dropdown" *ngIf="userMenuOpen">
+        <a routerLink="/login" class="dropdown-item">Logout</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sidebar Lateral (Mesmo padrão da Home) -->
+  <aside class="sidebar" [class.open]="sidebarOpen">
+    <div class="sidebar-header">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/3/3e/Ford_logo_flat.svg" alt="Ford Logo" class="ford-logo">
+    </div>
+
+    <nav class="sidebar-nav">
+      <a routerLink="/dashboard" (click)="toggleSidebar()" class="nav-item">Home</a>
+      <a routerLink="/vehicle" (click)="toggleSidebar()" class="nav-item">Dashboard</a>
+    </nav>
+  </aside>
+  <div class="backdrop" *ngIf="sidebarOpen" (click)="toggleSidebar()"></div>
+
+  <!-- Conteúdo Principal -->
+  <main class="main-content">
+    
+    <!-- Seção de Cards -->
+    <div class="cards-grid">
+      <!-- Card Select Veículo -->
+      <div class="card">
+        <div class="card-title">Veículo</div>
+        <div class="card-content">
+          <select [(ngModel)]="selectedVehicleId" (change)="onVehicleSelect()" class="vehicle-select">
+            <option *ngFor="let item of vehicles" [value]="item.id">
+              {{ item.vehicle }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Card Total de Vendas -->
+      <div class="card">
+        <div class="card-title">Total de Vendas</div>
+        <div class="card-content metric">
+          <span class="metric-value">{{ selectedVehicle?.volumetotal || 0 }}</span>
+          <span class="metric-unit">Unid</span>
+        </div>
+      </div>
+
+      <!-- Card Conectados -->
+      <div class="card">
+        <div class="card-title">Conectados</div>
+        <div class="card-content metric">
+          <span class="metric-value">{{ selectedVehicle?.connected || 0 }}</span>
+          <span class="metric-unit">Unid</span>
+        </div>
+      </div>
+
+      <!-- Card Update Software -->
+      <div class="card">
+        <div class="card-title">Update Software</div>
+        <div class="card-content metric">
+          <span class="metric-value">{{ selectedVehicle?.softwareUpdates || 0 }}</span>
+          <span class="metric-unit">Unid</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Imagem Central do Veículo -->
+    <div class="vehicle-display">
+      <img *ngIf="selectedVehicle?.img" [src]="selectedVehicle?.img" [alt]="selectedVehicle?.vehicle" class="car-image">
+    </div>
+
+    <!-- Tabela de Telemetria / Dados do VIN -->
+    <div class="telemetry-table">
+      <div class="table-header">
+        <div>Código - Vin</div>
+        <div>Odômetro</div>
+        <div>Nível de Combustível</div>
+        <div>Status</div>
+        <div>Lat.</div>
+        <div>Long.</div>
+      </div>
+      <div class="table-row">
+        <div>
+          <select [(ngModel)]="selectedVin" (change)="carregarDadosVin()" class="vin-select">
+            <option *ngFor="let vin of vinList" [value]="vin">{{ vin }}</option>
+          </select>
+        </div>
+        <div>{{ telemetryData?.odometro ? (telemetryData?.odometro + ' Km') : '--' }}</div>
+        <div>{{ telemetryData?.nivelCombustivel ? (telemetryData?.nivelCombustivel + ' %') : '--' }}</div>
+        <div>{{ telemetryData?.status || '--' }}</div>
+        <div>{{ telemetryData?.lat || '--' }}</div>
+        <div>{{ telemetryData?.long || '--' }}</div>
+      </div>
+    </div>
+
+  </main>
+</div>
