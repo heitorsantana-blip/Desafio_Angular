@@ -3,9 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.service';
+import { Veiculo, TelemetriaVeiculo } from '../models/vehicle.model'; // Importar os models
 
 @Component({
-  selector: 'app-vehicle',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './vehicle.html',
@@ -14,16 +15,14 @@ import { ApiService } from '../services/api.service';
 export class Vehicle implements OnInit {
   private apiService = inject(ApiService);
 
-  // Estados de layout
   sidebarOpen: boolean = false;
   userMenuOpen: boolean = false;
 
-  // Dados dos Veículos
-  vehicles: any[] = [];
+  // Variáveis com tipos definidos
+  vehicles: Veiculo[] = [];
   selectedVehicleId: number | null = null;
-  selectedVehicle: any = null;
+  selectedVehicle: Veiculo | null = null;
 
-  // Dados de Telemetria (VIN)
   vinList: string[] = [
     '2FRHDUYS2Y63NHD22454',
     '2RFAASDY54E4HDU34874',
@@ -33,7 +32,7 @@ export class Vehicle implements OnInit {
     '2FRHDUYS2Y63NHD22854'
   ];
   selectedVin: string = '2FRHDUYS2Y63NHD22455';
-  telemetryData: any = null;
+  telemetryData: TelemetriaVeiculo | null = null;
 
   ngOnInit(): void {
     this.carregarVeiculos();
