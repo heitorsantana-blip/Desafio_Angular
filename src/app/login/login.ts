@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ApiService } from '../services/api.service';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,21 +15,19 @@ import { ApiService } from '../services/api.service';
 export class Login {
   private apiService = inject(ApiService);
   private router = inject(Router);
+  private authService = inject(AuthService);
 
   nome: string = '';
   senha: string = '';
   erro: string = '';
 
-  fazerLogin() {
-    this.apiService.login(this.nome, this.senha).subscribe({
-      next: (resposta) => {
-        console.log('Login realizado com sucesso:', resposta);
-        
-        this.router.navigate(['/dashboard']);
-      },
-      error: (err) => {
-        this.erro = err.error?.message || 'Falha ao autenticar.';
-      }
-    });
+  fazerLogin(): void {
+  this.apiService.login(this.nome, this.senha).subscribe({
+    next: (usuario) => {
+      this.authService.salvarSessao(usuario); // Salva a sessão no localStorage
+      this.router.navigate(['/dashboard']);
+    },
+    error: (err) => console.error('Erro no login:', err)
+  });
   }
 }
