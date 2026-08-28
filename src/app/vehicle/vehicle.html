@@ -94,11 +94,13 @@
       </div>
       <div class="table-row">
         <div>
-          <select [(ngModel)]="selectedVin" (change)="carregarDadosVin()" class="vin-select">
-            <option *ngFor="let vin of vinList" [value]="vin">
-              {{ vin }}
-            </option>
-          </select>
+          <input 
+            type="text" 
+            [(ngModel)]="selectedVin" 
+            (input)="carregarDadosVin()" 
+            placeholder="Digite o VIN..." 
+            class="vin-input"
+          />
         </div>
         <div>{{ telemetryData?.odometro ? (telemetryData?.odometro + ' Km') : '--' }}</div>
         <div>{{ telemetryData?.nivelCombustivel ? (telemetryData?.nivelCombustivel + ' %') : '--' }}</div>

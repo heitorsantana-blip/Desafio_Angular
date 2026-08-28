@@ -3,10 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../services/api.service';
-import { Veiculo, TelemetriaVeiculo } from '../models/vehicle.model'; // Importar os models
+import { Veiculo, TelemetriaVeiculo } from '../models/vehicle.model';
 
 @Component({
-  selector: 'app-dashboard',
+  selector: 'app-vehicle',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './vehicle.html',
@@ -18,20 +18,11 @@ export class Vehicle implements OnInit {
   sidebarOpen: boolean = false;
   userMenuOpen: boolean = false;
 
-  // Variáveis com tipos definidos
   vehicles: Veiculo[] = [];
   selectedVehicleId: number | null = null;
   selectedVehicle: Veiculo | null = null;
 
-  vinList: string[] = [
-    '2FRHDUYS2Y63NHD22454',
-    '2RFAASDY54E4HDU34874',
-    '2FRHDUYS2Y63NHD22455',
-    '2RFAASDY54E4HDU34875',
-    '2FRHDUYS2Y63NHD22654',
-    '2FRHDUYS2Y63NHD22854'
-  ];
-  selectedVin: string = '2FRHDUYS2Y63NHD22455';
+  selectedVin: string = '';
   telemetryData: TelemetriaVeiculo | null = null;
 
   ngOnInit(): void {
@@ -67,12 +58,21 @@ export class Vehicle implements OnInit {
   }
 
   carregarDadosVin(): void {
-    if (!this.selectedVin) return;
-    this.apiService.getVehicleData(this.selectedVin).subscribe({
+    const vin = this.selectedVin?.trim();
+    
+    if (!vin) {
+      this.telemetryData = null;
+      return;
+    }
+
+    this.apiService.getVehicleData(vin).subscribe({
       next: (res) => {
         this.telemetryData = res;
       },
-      error: (err) => console.error('Erro ao buscar telemetria:', err)
+      error: (err) => {
+        console.error('Erro ou VIN não encontrado:', err);
+        this.telemetryData = null;
+      }
     });
   }
 }
